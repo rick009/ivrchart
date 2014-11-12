@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/ivr.css">
+    <title></title>
+</head>
+<body>
+
+    <div id="main" class="container-fluid" style="border: 1px solid red">
+        <div class="row">
+            <div class="col-lg-6">
+                <button class="btn btn-info">
+                    <i class="glyphicon glyphicon-plus"></i> 添加
+                </button>
+                <button class="btn btn-info">
+                    <i class="glyphicon glyphicon-save"></i> 保存
+                </button>
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+    </div>
+
+    <script src="js/jquery-1.9.0-min.js"></script>
+    <script src="js/jquery-ui-1.9.2.min.js"></script>
+    <!-- jquery jsPlumb adapter -->
+    <script src="js/jquery.jsPlumb-1.7.1.js"></script>
+    <!-- /JS -->
+
+    <!--  demo code -->
+    <script src="js/ivr.js"></script>
+    <script type="application/javascript">
+        function saveFlowchart(){
+            var nodes = [];
+            $(".node").each(function (idx, elem) {
+                var $elem = $(elem);
+                var endpoints = jsPlumb.getEndpoints($elem.attr('id'));
+                console.log('endpoints of '+$elem.attr('id'));
+                console.log(endpoints);
+                nodes.push({
+                    blockId: $elem.attr('id'),
+                    nodetype: $elem.attr('data-nodetype'),
+                    positionX: parseInt($elem.css("left"), 10),
+                    positionY: parseInt($elem.css("top"), 10)
+                });
+            });
+            var connections = [];
+            $.each(jsPlumb.getConnections(), function (idx, connection) {
+                connections.push({
+                    connectionId: connection.id,
+                    pageSourceId: connection.sourceId,
+                    pageTargetId: connection.targetId,
+                    anchors: $.map(connection.endpoints, function(endpoint) {
+
+                        return [[endpoint.anchor.x,
+                            endpoint.anchor.y,
+                            endpoint.anchor.orientation[0],
+                            endpoint.anchor.orientation[1],
+                            endpoint.anchor.offsets[0],
+                            endpoint.anchor.offsets[1]]];
+
+                    })
+                });
+            });
+
+            var flowChart = {};
+            flowChart.nodes = nodes;
+            flowChart.connections = connections;
+            flowChart.numberOfElements = numberOfElements;
+
+            var flowChartJson = JSON.stringify(flowChart);
+            //console.log(flowChartJson);
+
+            $('#jsonOutput').val(flowChartJson);
+        }
+
+        function loadFlowchart(){
+            var flowChartJson = $('#jsonOutput').val();
+            var flowChart = JSON.parse(flowChartJson);
+            var nodes = flowChart.nodes;
+            $.each(nodes, function( index, elem ) {
+                if(elem.nodetype === 'startpoint'){
+                    repositionElement('startpoint', elem.positionX, elem.positionY);
+                }else if(elem.nodetype === 'endpoint'){
+                    repositionElement('endpoint', elem.positionX, elem.positionY);
+                }else if(elem.nodetype === 'task'){
+                    var id = addTask(elem.blockId);
+                    repositionElement(id, elem.positionX, elem.positionY);
+                }else if(elem.nodetype === 'decision'){
+                    var id = addDecision(elem.blockId);
+                    repositionElement(id, elem.positionX, elem.positionY);
+                }else{
+
+                }
+            });
+
+            var connections = flowChart.connections;
+            $.each(connections, function( index, elem ) {
+                var connection1 = jsPlumb.connect({
+                    source: elem.pageSourceId,
+                    target: elem.pageTargetId,
+                    anchors: elem.anchors
+                });
+
+            });
+
+            numberOfElements = flowChart.numberOfElements;
+        }
+    </script>
+
+</body>
+</html>
