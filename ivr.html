@@ -10,19 +10,50 @@
 </head>
 <body>
 
-    <div id="main" class="container-fluid" style="border: 1px solid red">
+    <div id="main" class="container-fluid">
         <div class="row">
-            <div class="col-lg-6">
-                <button class="btn btn-info">
-                    <i class="glyphicon glyphicon-plus"></i> 添加
+            <div class="col-lg-12">
+                <button id="node-start" class="btn btn-info">
+                    <i class="glyphicon glyphicon-star"></i> 开始
                 </button>
-                <button class="btn btn-info">
+                <button id="node-sound" class="btn btn-info">
+                    <i class="glyphicon glyphicon-star"></i> 放音
+                </button>
+                <button id="node-queue" class="btn btn-info">
+                    <i class="glyphicon glyphicon-star"></i> 转技能组
+                </button>
+                <button id="node-keys" class="btn btn-info">
+                    <i class="glyphicon glyphicon-star"></i> 按键导航
+                </button>
+                <button id="node-phone" class="btn btn-info">
+                    <i class="glyphicon glyphicon-star"></i> 转电话
+                </button>
+                <button id="node-end" class="btn btn-info">
+                    <i class="glyphicon glyphicon-star"></i> 结束
+                </button>
+                <button class="btn btn-primary">
                     <i class="glyphicon glyphicon-save"></i> 保存
                 </button>
             </div>
         </div>
+        <!--画图区域-->
         <div class="row">
+            <div class="col-lg-10">
+                <div class="panel panel-default">
+                    <div class="panel-heading">IVR信息</div>
+                    <div id="canvas" class="panel-body">
 
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">属性</div>
+                    <div id="info" class="panel-body">
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

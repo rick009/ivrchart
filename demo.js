@@ -163,7 +163,7 @@ jsPlumb.ready(function() {
 		});
 	});
 
-	jsPlumb.fire("jsPlumbDemoLoaded", instance);
+	//jsPlumb.fire("jsPlumbDemoLoaded", instance);
 
     $('#save').on('click', function() {
         console.log(instance.getAllConnections());
